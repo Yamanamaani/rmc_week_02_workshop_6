@@ -6,6 +6,8 @@ output: github_document
 
 ```{r include = F}
 knitr::opts_chunk$set(echo = FALSE)
+
+
 ```
 
 # Introduction
@@ -15,6 +17,49 @@ This document compares the Disability-Adjusted Life Year (DALY) diseases burden 
 The source data is from the Institute for Health Metrics and Evaluation (IHME) Global Burden of Disease (GBD) study. 
 
 ```{r child='cmnn_burden.Rmd'}
+
+if(!require(pacman)) install.packages(pacman)
+pacman::p_load(tidyverse,
+               here,
+               gt)
+
+cmnn_df <- 
+  read.csv(here("data/burden-of-disease-cmnn.csv"))
+
+
+names(cmnn_df)
+
+cmnn_df <- 
+  cmnn_df %>% 
+  rename(DALY = DALYs..Disability.Adjusted.Life.Years....Communicable..maternal..neonatal..and.nutritional.diseases...Sex..Both...Age..Age.standardized..Rate.,
+         Country = Entity)
+
+unique(cmnn_df$Country)
+
+#"Philippines" "Palestine" "South Africa" 
+
+unique(cmnn_df$Year)
+
+cmnn_PSE_ZAF_PHL <- 
+  cmnn_df  %>% 
+  filter(Country %in% c("Philippines","Palestine","South Africa" ))
+
+cmnn_tab <- 
+  cmnn_PSE_ZAF_PHL %>% 
+  select(Country, Year, DALY) %>% 
+  pivot_wider(names_from = Country, 
+              values_from = DALY)
+
+
+gt(cmnn_tab)
+
+#plotting a line graph showing the cmnn trade 
+
+cmnn_PSE_ZAF_PHL %>% 
+  ggplot(aes(x = Year, y = DALY, fill = Country)) + 
+  geom_col()
+           
+
 ```
 
 ```{r child='ncd_burden.Rmd'}
