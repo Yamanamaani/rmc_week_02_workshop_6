@@ -46,4 +46,4 @@ ggplot(filtered_data_ncdplot, aes(x = Year, y = DALY, color = Entity)) +
 
 Provide a brief analysis based on the data presented in the table and chart. Highlight any significant findings or patterns. About 3 sentences.
 
-Palestine and South Africa has a significant drop in DALYs through time, but for the Philippines it has an increase over the years until 2015.
+Palestine and South Africa has a significant drop in DALYs through time, but for the Philippines it has an increase over the years until 2015. Since the data is not normalized for population, a deeper analysis must be done. It is noticeable though how the pattern for the Philippines is different, owing perhaps to lifestyle and diet in the country.
