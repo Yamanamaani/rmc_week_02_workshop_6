@@ -36,8 +36,8 @@ filtered_data_ncdplot <- data_ncd %>%
   select(-Code)
 
 ggplot(filtered_data_ncdplot, aes(x = Year, y = DALY, color = Entity)) +
-  geom_line() +
-  labs(title = "Trend of DALY for Philippines, Palestine, and South Africa",
+  geom_line(size = 1) +
+  labs(title = "Trend of NCD DALY for Philippines, Palestine, and South Africa",
        color = "Country")
 
 ```
