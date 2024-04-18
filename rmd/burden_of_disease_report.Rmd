@@ -6,6 +6,8 @@ output: github_document
 
 ```{r include = F}
 knitr::opts_chunk$set(echo = FALSE)
+
+
 ```
 
 # Introduction
@@ -15,6 +17,7 @@ This document compares the Disability-Adjusted Life Year (DALY) diseases burden 
 The source data is from the Institute for Health Metrics and Evaluation (IHME) Global Burden of Disease (GBD) study. 
 
 ```{r child='cmnn_burden.Rmd'}
+
 ```
 
 ```{r child='ncd_burden.Rmd'}

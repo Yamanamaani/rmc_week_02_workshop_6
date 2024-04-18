@@ -1,8 +1,12 @@
 # Communicable, Maternal, Neonatal, and Nutritional Disease Burden (CMNN)
 
-```{r}
+```{r echo = FALSE, message=FALSE}
 # Load necessary packages
-pacman::p_load(tidyverse, knitr, here)
+pacman::p_load(tidyverse,
+               knitr, 
+               here,
+               gt
+               )
 
 # Import the communicable diseases data
 data_cmnn <- read_csv(here("data", "burden-of-disease-cmnn.csv"))
@@ -10,20 +14,54 @@ data_cmnn <- read_csv(here("data", "burden-of-disease-cmnn.csv"))
 
 ## Table of Estimates for CMNN Burden Over Time
 
-```{r}
+```{r echo = FALSE}
 # Here render a table for the DALY burden over time for the three countries 
-# You should pivot the data to show each country in a separate column.
+#names(cmnn_df)
+data_cmnn <- 
+  data_cmnn %>% 
+  rename(Country = Entity, 
+         DALY = `DALYs (Disability-Adjusted Life Years) - Communicable, maternal, neonatal, and nutritional diseases - Sex: Both - Age: Age-standardized (Rate)`)
+
+cmnn_PSE_ZAF_PHL <- 
+  data_cmnn %>% 
+  filter(Country %in% c("Philippines","Palestine","South Africa" ))
+
+ #You should pivot the data to show each country in a separate column.
+cmnn_tab <- 
+  cmnn_PSE_ZAF_PHL %>% 
+  select(Country, Year, DALY) %>% 
+  pivot_wider(names_from = Country, 
+              values_from = DALY)
+
+
+
 # Use kable() from the knitr package to render the table.
+
+kable(cmnn_tab)
+
+
 ```
 
 ## Plot Showing Trends in CMNN Burden Over Time
 
-```{r}
+```{r echo = FALSE}
 # Here, plot a line graph showing the trend of DALY burden for the chosen countries over time. You can use ggplot2 to create this plot. Each country's line should be a different color.
+
+cmnn_plot <- 
+  cmnn_PSE_ZAF_PHL %>% 
+  ggplot(aes(x = Year, y = DALY, color = Country)) + 
+  geom_line(linewidth = 0.7) +
+  labs(title = "CMNN Disability Adjusted Life Years for South Africa, The Philippines and Palestine from 1990 - 2019",
+       subtitle = "Communicable, Maternal, Neonatal, and Nutritional Diseases ",
+       caption = "Source: Global Burden of Disease Study 2019 (GBD 2019) Disease and Injury Burden 1990-2019") + 
+  theme_dark()
+
+
+cmnn_plot
 ```
 
 ## Summary of CMNN Burden Findings
 
-Provide a brief analysis based on the data presented in the table and chart. Highlight any significant findings or patterns. About 3 sentences.
+Based on the graph, South Africa uniquely exhibited an upward trend in the cmnn DALY, peaking in 2005, before decreasing, yet still remaining higher than both Palestine and the Philippines. The sharp rise in South Africa's DALY could largely be attributed to the HIV pandemic, considering South Africa has one of the highest populations of HIV-positive individuals. The subsequent decline post-2005 is likely linked to the reduction in HIV prevalence, driven by enhanced HIV prevention and treatment programs.
 
 
