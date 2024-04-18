@@ -1,6 +1,10 @@
+```{r include = F}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 # Overall Disease Burden
 
-```{r}
+```{r include = F}
 # Load necessary packages
 pacman::p_load(tidyverse, knitr, here)
 
@@ -16,13 +20,48 @@ data_overall <- read_csv(here("data", "burden-of-disease-all-causes.csv"))
 # Use kable() from the knitr package to render the table.
 ```
 
+
+
+```{r}
+data_overall_filtered <- data_overall %>% 
+  filter (Entity %in% c("Philippines", "South Africa", "Palestine"))
+
+#change the name of the column DALYs to shorter one
+data_overall_filtered <- data_overall_filtered %>% 
+  rename(DALYs = `DALYs (Disability-Adjusted Life Years) - All causes - Sex: Both - Age: Age-standardized (Rate)`)
+
+#remove the Code column
+data_overall_filtered <- data_overall_filtered %>% 
+  select(-Code)
+
+#pivot the data to have countries as separate columns 
+data_overall_pivot <- data_overall_filtered %>% 
+   spread(key = Entity, value = DALYs)
+
+kable (data_overall_pivot)
+
+```
+
+
 ## Plot Showing Trends in Overall Disease Burden Over Time
 
 ```{r}
 # Here, plot a line graph showing the trend of DALY burden for the chosen countries over time. You can use ggplot2 to create this plot. Each country's line should be a different color.
+ggplot (data_overall_filtered, aes (x= Year, y= DALYs, group= Entity, color= Entity))+
+  geom_line()+
+  labs(title= "Trend of DALYs Burden Over Time")
+
 ```
 
 ## Summary of Overall Disease Burden Findings
 
-Provide a brief analysis based on the data presented in the table and chart. Highlight any significant findings or patterns. About 3 sentences.
+South Africa (blue line) shows a significant and unique trend among the three. It begins with a steady rise in DALYs from 1990, peaks sharply around the year 2005, and then exhibits a notable decline. This peak likely indicates a severe health-related event or epidemic during that period, which was followed by a successful mitigation leading to the subsequent decline.
+The Philippines (green line) displays a relatively flat trend with minor undulations over time, suggesting a stable DALYs burden without dramatic increases or decreases. This could indicate consistent health outcomes and possibly effective health interventions to prevent major public health challenges.
+Palestine (red line) showed a general downward trend in DALYs over the observed timeframe, indicating an overall decrease in the burden of disease or disability. Notably, there is an exception between 2000 and 2010, where there was a temporary increase. This could point to a rising health burden during that decade, potentially from non-communicable diseases (NCDs), or it could be due to other factors such as demographic shifts, evolving health reporting standards, or changes in the accessibility and quality of healthcare
+
+
+
+
+
+
 
